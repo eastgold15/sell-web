@@ -1,42 +1,16 @@
 /**
  * 自动生成的数据库 Schema 文件
  * 请勿手动修改此文件，运行 `bun run generate:schema` 重新生成
- * 生成时间: 2025-08-12T02:19:33.288Z
+ * 生成时间: 2025-08-17T20:46:17.616Z
  */
 
-import { tokenSchema, userSchema } from "./auth.ts";
-import {
-	basicInstanceSchema,
-	enemyerSchema,
-	itemSchema,
-	otherJsonSchema,
-	playerSchema,
-	raceSchema,
-	skillEffectsSchema,
-	stageSchema,
-	waveEnemyerSchema,
-	waveSchema,
-	weaponInfoSchema,
-} from "./schema.ts";
-import { shopInfoSchema, shopPoolsSchema, shopTiersSchema } from "./shop.ts";
+import { userSchema, tokenSchema } from './auth.ts';
+import { skillEffectsSchema } from './schema.ts';
 
 export const dbSchema = {
-	userSchema,
-	tokenSchema,
-	skillEffectsSchema,
-	raceSchema,
-	basicInstanceSchema,
-	playerSchema,
-	enemyerSchema,
-	itemSchema,
-	stageSchema,
-	waveSchema,
-	waveEnemyerSchema,
-	weaponInfoSchema,
-	otherJsonSchema,
-	shopTiersSchema,
-	shopPoolsSchema,
-	shopInfoSchema,
+  userSchema,
+  tokenSchema,
+  skillEffectsSchema,
 };
 
 /**
@@ -47,26 +21,9 @@ export type DbSchema = typeof dbSchema;
 /**
  * 所有表的名称列表
  */
-export const tableNames = [
-	"userSchema",
-	"tokenSchema",
-	"skillEffectsSchema",
-	"raceSchema",
-	"basicInstanceSchema",
-	"playerSchema",
-	"enemyerSchema",
-	"itemSchema",
-	"stageSchema",
-	"waveSchema",
-	"waveEnemyerSchema",
-	"weaponInfoSchema",
-	"otherJsonSchema",
-	"shopTiersSchema",
-	"shopPoolsSchema",
-	"shopInfoSchema",
-] as const;
+export const tableNames = ['userSchema', 'tokenSchema', 'skillEffectsSchema'] as const;
 
 /**
  * 表名称类型
  */
-export type TableName = (typeof tableNames)[number];
+export type TableName = typeof tableNames[number];
