@@ -48,17 +48,14 @@ export const app = new Elysia()
 			path: "/swagger",
 			documentation: {
 				info: {
-					title: "末世机械师 API",
+					title: "Elysia Start API",
 					version: "1.0.0",
-					description: "末世机械师游戏后端API文档",
+					description: "基于 Elysia 框架的现代化 Web API 启动模板",
 				},
 				tags: [
 					{ name: "System", description: "系统相关接口" },
 					{ name: "Auth", description: "用户认证相关接口" },
 					{ name: "User", description: "用户管理相关接口" },
-					{ name: "Weapon", description: "武器管理相关接口" },
-					{ name: "Stage", description: "关卡管理相关接口" },
-					{ name: "Monster", description: "怪物管理相关接口" },
 				],
 			},
 		}),

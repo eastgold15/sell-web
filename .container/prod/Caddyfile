@@ -1,5 +1,5 @@
 # 替换为您的域名
-wx.cykycyky.top {
+localhost {
     # 反向代理到应用服务
     reverse_proxy app:{env.APP_PORT} {
         # 健康检查路径（需与应用的/health接口匹配）
@@ -19,7 +19,7 @@ wx.cykycyky.top {
 :9010 {
 
     # 设置根目录
-    root * /1/MechanicEndWorld2/front
+    root * /1/elysia-start/front
      # 静态资源缓存优化
     header /assets/* {
         Cache-Control "public, max-age=31536000, immutable"

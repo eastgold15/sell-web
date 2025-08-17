@@ -10,7 +10,7 @@ envConfig.loadConfig();
 // 获取数据库连接URL
 const databaseUrl = envConfig.get(
 	"DATABASE_URL",
-	"postgres://app_user:app_pass@localhost:5432/MechanicEndWorld",
+	"postgres://app_user:app_pass@localhost:5432/elysia_start",
 );
 
 console.log("1111", databaseUrl);

@@ -17,8 +17,8 @@ on:
         type: boolean
 
 env:
-  PROJECT_NAME: MechanicEndWorld2 # 项目名称
-  PROJECT_DIR: /1/MechanicEndWorld2  #服务器项目目录
+  PROJECT_NAME: elysia-start # 项目名称
+  PROJECT_DIR: /1/elysia-start  #服务器项目目录
   SERVER_PORT: 22
 
 jobs:

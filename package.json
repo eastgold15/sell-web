@@ -1,5 +1,5 @@
 {
-  "name": "sell-web",
+  "name": "elysia-start",
   "version": "1.0.50",
   "scripts": {
     "dev": "bun --watch src/index.ts",

@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: registry.cn-chengdu.aliyuncs.com # 阿里云容器镜像服务
-  IMAGE_NAME: docker-tzd/mechanicendworld # 镜像名称使用实际仓库名
+  IMAGE_NAME: elysia-start # 镜像名称使用实际仓库名
 
 jobs:
   build-and-push:

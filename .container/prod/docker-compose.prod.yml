@@ -1,7 +1,7 @@
 services:
   app:
-    image: registry.cn-chengdu.aliyuncs.com/docker-tzd/mechanicendworld:${IMAGE_TAG:-latest}
-    container_name: MechanicEndWorld-end
+    image: elysia-start:${IMAGE_TAG:-latest}
+    container_name: elysia-start-app
     pull_policy: always # 强制每次启动时拉取最新镜像\
     expose:
       # 改为 expose 仅内部暴露端口
@@ -33,8 +33,8 @@ services:
       - "9011:9011"
       - "9012:9012"
     volumes:
-      - ../../front:/1/MechanicEndWorld2/front
-      - ../../remote:/1/MechanicEndWorld2/remote
+      - ../../front:/1/elysia-start/front
+      - ../../remote:/1/elysia-start/remote
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data # 证书持久化
       - caddy_config:/config

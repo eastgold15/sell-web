@@ -42,11 +42,11 @@ on:
         type: string
 
 env:
-  PROJECT_NAME: MechanicEndWorld2 # 项目名称
-  PROJECT_DIR: /1/MechanicEndWorld2  #服务器项目目录
+  PROJECT_NAME: elysia-start # 项目名称
+  PROJECT_DIR: /1/elysia-start  #服务器项目目录
   SERVER_PORT: 22
   REGISTRY: registry.cn-chengdu.aliyuncs.com
-  IMAGE_NAME: docker-tzd/mechanicendworld
+  IMAGE_NAME: elysia-start
 
 jobs:
   deploy:
