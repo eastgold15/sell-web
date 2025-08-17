@@ -1,0 +1,104 @@
+name: "🚀 完整部署管道 (构建+部署)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_build:
+        description: '⏭️ 跳过构建步骤（使用现有镜像）'
+        required: false
+        default: false
+        type: boolean
+      image_tag:
+        description: '🏷️ 指定镜像标签 (跳过构建时使用)'
+        required: false
+        default: 'latest'
+        type: string
+      force_recreate:
+        description: '🔄 强制重新创建容器'
+        required: false
+        default: false
+        type: boolean
+      auto_deploy:
+        description: '🎯 构建完成后自动部署'
+        required: false
+        default: true
+        type: boolean
+
+  release:
+    types: [published]
+
+env:
+  REGISTRY: registry.cn-chengdu.aliyuncs.com
+  IMAGE_NAME: docker-tzd/mechanicendworld
+
+
+jobs:
+  # 第一步：构建镜像
+  build:
+    name: "🔨 构建 Docker 镜像"
+    if: github.event.inputs.skip_build != 'true'
+    uses: ./.github/workflows/build-image.yml
+    secrets: inherit
+
+  # 第二步：传输文件
+  transfer:
+    name: "📁 传输文件到服务器"
+    needs: [build]
+    if: always() && (needs.build.result == 'success' || github.event.inputs.skip_build == 'true')
+    uses: ./.github/workflows/transfer-files.yml
+    secrets: inherit
+
+  # 第三步：部署服务
+  deploy:
+    name: "🚀 部署到生产环境"
+    needs: [build, transfer]
+    if: always() && needs.transfer.result == 'success' && github.event.inputs.auto_deploy != 'false'
+    uses: ./.github/workflows/deploy-service.yml
+    with:
+      image_tag: ${{ github.event.inputs.skip_build == 'true' && github.event.inputs.image_tag || needs.build.outputs['version-tag'] || 'latest' }}
+      force_recreate: ${{ github.event.inputs.force_recreate }}
+      service_action: 'deploy'
+    secrets: inherit
+
+  # 汇总结果
+  summary:
+    name: "📋 部署摘要"
+    needs: [build, transfer, deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📊 部署结果汇总
+        run: |
+          echo "## 🎉 部署管道执行完成"
+          echo ""
+          echo "### 📦 构建信息"
+          if [ "${{ github.event.inputs.skip_build }}" = "true" ]; then
+            echo "- 构建状态: ⏭️ 跳过"
+            echo "- 使用镜像: ${{ github.event.inputs.image_tag }}"
+          else
+            echo "- 构建状态: ${{ needs.build.result == 'success' && '✅ 成功' || '❌ 失败' }}"
+            if [ "${{ needs.build.result }}" = "success" ]; then
+              echo "- 镜像已构建并推送到阿里云 ACR"
+              echo "- 构建标签: ${{ needs.build.outputs['version-tag'] }}"
+            fi
+          fi
+          echo ""
+          echo "### 📁 文件传输"
+          echo "- 传输状态: ${{ needs.transfer.result == 'success' && '✅ 成功' || '❌ 失败' }}"
+          echo ""
+          echo "### 🚀 部署信息"
+          if [ "${{ needs.deploy.result }}" = "success" ]; then
+            echo "- 部署状态: ✅ 成功"
+            DEPLOY_TAG="${{ github.event.inputs.skip_build == 'true' && github.event.inputs.image_tag || needs.build.outputs['version-tag'] || 'latest' }}"
+            echo "- 使用镜像: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$DEPLOY_TAG"
+          elif [ "${{ needs.deploy.result }}" = "skipped" ]; then
+            echo "- 部署状态: ⏭️ 跳过 (auto_deploy=false)"
+          else
+            echo "- 部署状态: ❌ 失败"
+          fi
+          echo ""
+          echo "### 🔗 快速操作"
+          echo "- 查看服务状态: 手动运行 'deploy-service.yml' 工作流，选择 'status' 操作"
+          echo "- 重启服务: 手动运行 'deploy-service.yml' 工作流，选择 'restart' 操作"
+          FINAL_TAG="${{ github.event.inputs.skip_build == 'true' && github.event.inputs.image_tag || needs.build.outputs['version-tag'] || 'latest' }}"
+          echo "- 拉取镜像: \`docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$FINAL_TAG\`"
