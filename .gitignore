@@ -40,6 +40,6 @@ yarn-error.log*
 **/*.log
 package-lock.json
 **/*.bun
-
+**/*.exe
 # secrets and sensitive files
 .secrets
